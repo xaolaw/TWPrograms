@@ -5,33 +5,47 @@ import java.util.Random;
 public class Producer extends Thread{
     private Proxy proxy;
 
-    private long additionalWork,normalWork,MAX_ITERATIONS;
+    private int time;
+    private long additionalWork;
+    private long normalWork;
+    private long MAX_ITERATIONS;
     private Random generator;
-    public Producer(Proxy proxy_){
+    public Producer(Proxy proxy_,int time_){
         this.additionalWork=0;
         this.normalWork=0;
         this.proxy=proxy_;
         generator = new Random(0);
         MAX_ITERATIONS=50;
+        this.time=time_;
     }
     public int getRandomNumber(int min, int max) {
         return (this.generator.nextInt(max - min) + min);
+    }
+    public long getAdditionalWork() {
+        return additionalWork;
     }
 
     @Override
     public void run() {
         long start,end;
         start=System.currentTimeMillis();
-        while(true){
+        boolean running=true;
+        while(running){
             try {
                 myFuture object= this.proxy.produce(getRandomNumber(1,proxy.getLimit()/2));
                 //asynchronous work
                 double sum = 0;
+
                 while(!object.isDone()){
-                    for (int i=0;i<MAX_ITERATIONS;i++){
-                        sum+=Math.sin(getRandomNumber(1,10));
+                    long start_=System.currentTimeMillis();
+                    long end_=System.currentTimeMillis();
+                    while((end_-start_)<=time){
+                        for (int i=0;i<MAX_ITERATIONS;i++){
+                            sum+=Math.sin(1.22568917);
+                        }
+                        additionalWork++;
+                        end_=System.currentTimeMillis();
                     }
-                    additionalWork++;
                 }
                 normalWork++;
                 //System.out.println("Producer dodatkowa praca: "+additionalWork);
@@ -39,11 +53,11 @@ public class Producer extends Thread{
                 throw new RuntimeException(e);
             }
             end = System.currentTimeMillis();
-            //every 5 second raport
+            //after 60 sec we end the program
             long took=((end - start) / 1000);
-            if(took>=5){
-                System.out.println("Mój id: "+currentThread().getId()+" dodatkowa praca ilośc pętli: "+additionalWork+ " zwykłej pracy: "+normalWork);
-                start=System.currentTimeMillis();
+            if(took>=60){
+                //System.out.println("Producent mój id: "+currentThread().getId()+" dodatkowa praca ilośc pętli: "+additionalWork+ " zwykłej pracy: "+normalWork);
+                running=false;
             }
         }
     }

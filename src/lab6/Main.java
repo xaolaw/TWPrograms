@@ -5,20 +5,37 @@ import java.util.concurrent.TimeUnit;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
-        Proxy bufor = new Proxy(10);
+        int[] time={1,5,25,50,100};
 
-        int numberOfThreads = 3;
+        for (int k : time) {
+            Proxy bufor = new Proxy(10);
 
-        Producer[] producerList = new Producer[numberOfThreads];
-        Consumer[] clientList = new Consumer[numberOfThreads];
+            int numberOfThreads = 3;
 
-        for (int i = 0; i < numberOfThreads; i++) {
-            producerList[i] = new Producer(bufor);
-            clientList[i] = new Consumer(bufor);
+            Producer[] producerList = new Producer[numberOfThreads];
+            Consumer[] clientList = new Consumer[numberOfThreads];
+
+            for (int i = 0; i < numberOfThreads; i++) {
+                producerList[i] = new Producer(bufor, k);
+                clientList[i] = new Consumer(bufor, k);
+            }
+            for (int i = 0; i < numberOfThreads; i++) {
+                producerList[i].start();
+                clientList[i].start();
+            }
+            for (int i = 0; i < numberOfThreads; i++) {
+                producerList[i].join();
+                clientList[i].join();
+            }
+            long sum = 0;
+            for (int i = 0; i < numberOfThreads; i++) {
+                sum += producerList[i].getAdditionalWork();
+                sum += clientList[i].getAdditionalWork();
+            }
+            System.out.println("Czas na dodatkowe zadanie " + k + " ms wykonano dodatkowej pracy: " + sum);
         }
-        for (int i = 0; i < numberOfThreads; i++) {
-            producerList[i].start();
-            clientList[i].start();
-        }
+        System.exit(0);
+
+
     }
 }
