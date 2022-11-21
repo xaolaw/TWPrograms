@@ -18,9 +18,7 @@ public class Produce extends MethodRequest{
     @Override
     void execute() {
         servant.produce(toAdd);
-        synchronized (futureBufor){
-            futureBufor.setValue(toAdd);
-            futureBufor.notify();
-        }
+        futureBufor.setValue(toAdd);
+
     }
 }

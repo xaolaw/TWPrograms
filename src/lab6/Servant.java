@@ -9,14 +9,12 @@ public class Servant {
         this.limit=limit_;
     }
     public void produce(int toAdd){
-        //int toAdd=getRandomNumber(1,limit/2);
         productCounter+=toAdd;
-        System.out.println("Dodałem: "+toAdd);
+        //System.out.println("Dodałem: "+toAdd);
     }
-    public void consume(int toConsume,int loop){
-        //int toConsume=getRandomNumber(1,limit/2);
+    public void consume(int toConsume){
         productCounter-=toConsume;
-        System.out.println("Skonsumowałem: "+toConsume+ " Moja pętla: "+loop);
+        //System.out.println("Skonsumowałem: "+toConsume);
     }
     public int getLimit() {
         return limit;

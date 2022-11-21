@@ -3,11 +3,11 @@ package lab6;
 public class Consume extends MethodRequest{
     private Servant servant;
     private int toConsume;
-    private int loop;
-    public Consume(Servant servant_,int toConsume_,int loop) {
+    myFuture futureBufor;
+    public Consume(Servant servant_,int toConsume_,myFuture futureBufor_) {
         this.servant=servant_;
         this.toConsume=toConsume_;
-        this.loop=loop;
+        this.futureBufor=futureBufor_;
     }
 
     @Override
@@ -17,6 +17,7 @@ public class Consume extends MethodRequest{
 
     @Override
     void execute() {
-        servant.consume(toConsume,loop);
+        servant.consume(toConsume);
+        futureBufor.setValue(toConsume);
     }
 }

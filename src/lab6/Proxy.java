@@ -9,16 +9,28 @@ public class Proxy extends Thread{
         this.scheduler=new Scheduler(limit_);
         this.servant=new Servant(limit_);
         this.limit=limit_;
+        new Thread("smth"){
+            public void run(){
+                try {
+                    scheduler.dispatch();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }.start();
     }
+
     public myFuture produce(int value) throws InterruptedException {
-        myFuture promise= new myFuture();
+        myFuture promise = new myFuture();
         MethodRequest requestProduce = new Produce(servant,value,promise);
         scheduler.enqueue(requestProduce);
         return promise;
     }
-    public void consume(int value,int loop) throws InterruptedException {
-        MethodRequest requestConsume = new Consume(servant,value,loop);
+    public myFuture consume(int value) throws InterruptedException {
+        myFuture promise = new myFuture();
+        MethodRequest requestConsume = new Consume(servant,value,promise);
         scheduler.enqueue(requestConsume);
+        return promise;
     }
     public int getLimit() {
         return limit;

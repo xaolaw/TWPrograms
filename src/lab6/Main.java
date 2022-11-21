@@ -1,29 +1,22 @@
 package lab6;
 
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
 public class Main {
-    public static void main(String[] args){
+    public static void main(String[] args) throws InterruptedException {
         Proxy bufor = new Proxy(10);
 
-        int numberOfThreads=1;
+        int numberOfThreads = 3;
 
-        Thread[] producerList= new Thread[numberOfThreads];
-        Thread[] clientList= new Thread[numberOfThreads];
+        Producer[] producerList = new Producer[numberOfThreads];
+        Consumer[] clientList = new Consumer[numberOfThreads];
 
-        new Thread("smth"){
-            public void run(){
-                try {
-                    bufor.getScheduler().dispatch();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }.start();
-
-        for (int i=0;i<numberOfThreads;i++){
-            producerList[i]=new Producer(bufor);
-            clientList[i]=new Consumer(bufor);
+        for (int i = 0; i < numberOfThreads; i++) {
+            producerList[i] = new Producer(bufor);
+            clientList[i] = new Consumer(bufor);
         }
-        for (int i=0;i<numberOfThreads;i++){
+        for (int i = 0; i < numberOfThreads; i++) {
             producerList[i].start();
             clientList[i].start();
         }

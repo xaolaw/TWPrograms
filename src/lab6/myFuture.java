@@ -12,15 +12,10 @@ public class myFuture {
         this.value = value;
         isDone=true;
     }
-
     public boolean isDone() {
         return isDone;
     }
-    synchronized int get() throws InterruptedException {
-        if(isDone){
-            return value;
-        }
-        wait();
+    int get() {
         return value;
     }
 }
