@@ -25,6 +25,10 @@ public class Producer extends Thread{
         return additionalWork;
     }
 
+    public long getNormalWork() {
+        return normalWork;
+    }
+
     @Override
     public void run() {
         long start,end;
@@ -52,13 +56,13 @@ public class Producer extends Thread{
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            end = System.currentTimeMillis();
+            /*end = System.currentTimeMillis();
             //after 60 sec we end the program
             long took=((end - start) / 1000);
             if(took>=60){
                 //System.out.println("Producent mój id: "+currentThread().getId()+" dodatkowa praca ilośc pętli: "+additionalWork+ " zwykłej pracy: "+normalWork);
                 running=false;
-            }
+            }*/
         }
     }
 }

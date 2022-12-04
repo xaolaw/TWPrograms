@@ -4,12 +4,13 @@ public class Proxy extends Thread{
     private Servant servant;
     private Scheduler scheduler;
     private int limit;
+    private Thread loop;
 
-    public Proxy(int limit_){
-        this.scheduler=new Scheduler(limit_);
+    public Proxy(int limit_,int time_){
+        this.scheduler=new Scheduler(limit_,time_);
         this.servant=new Servant(limit_);
         this.limit=limit_;
-        new Thread("smth"){
+        this.loop = new Thread("smth"){
             public void run(){
                 try {
                     scheduler.dispatch();
@@ -17,7 +18,12 @@ public class Proxy extends Thread{
                     throw new RuntimeException(e);
                 }
             }
-        }.start();
+        };
+        loop.start();
+    }
+
+    public Thread getLoop() {
+        return loop;
     }
 
     public myFuture produce(int value) throws InterruptedException {

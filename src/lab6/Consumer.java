@@ -18,6 +18,10 @@ public class Consumer extends Thread{
         return additionalWork;
     }
 
+    public long getNormalWork() {
+        return normalWork;
+    }
+
     public int getRandomNumber(int min, int max) {
         return (generator.nextInt(max - min) + min);
     }
@@ -48,13 +52,13 @@ public class Consumer extends Thread{
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            end = System.currentTimeMillis();
+            /*end = System.currentTimeMillis();
             //after 60 sec we end the program
             long took=((end - start) / 1000);
             if(took>=60){
                 //System.out.println("Konsument mój id: "+currentThread().getId()+" dodatkowa praca ilośc pętli: "+additionalWork+ " zwykłej pracy: "+normalWork);
                 runnning=false;
-            }
+            }*/
         }
     }
 }

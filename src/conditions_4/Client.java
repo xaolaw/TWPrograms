@@ -15,7 +15,7 @@ public class Client extends Thread{
     Bufor bufor;
     boolean mode;
     int loop,time,maxLoop,numberOfThreads,MAX_ITERATIONS;
-    long additionalWork;
+    long additionalWork,normalWork;
 
     Client(Bufor b, boolean mode,int numberOfThreads_,int maxLoop_,int time_){
         this.bufor=b;
@@ -26,32 +26,36 @@ public class Client extends Thread{
         MAX_ITERATIONS=50;
         additionalWork=0;
         this.time=time_;
+        normalWork=0;
     }
     public long getAdditionalWork() {
         return additionalWork;
     }
+
+    public long getNormalWork() {
+        return normalWork;
+    }
+
     public void run() {
         long start = System.currentTimeMillis();
-        boolean running=true;
-        while (running) {
+        //20 seconds timeout
+        long end = start + 20 * 1000;
+        while (System.currentTimeMillis()<=end) {
             bufor.getProduct(mode);
             //System.out.println("Jestem konsument pętla: " + loop + (mode ? " Jestem dużym konsumentem" : " Jestem mały"));
             long start_=System.currentTimeMillis();
-            long end_=System.currentTimeMillis();
-            while((end_-start_)<=time){
+            long end_ = start_ + time;
+            while(System.currentTimeMillis()<=end_){
                 int sum=0;
                 for (int i=0;i<MAX_ITERATIONS;i++){
                     sum+=Math.sin(1.22568917);
                 }
                 additionalWork++;
-                end_=System.currentTimeMillis();
+
             }
-            long end=System.currentTimeMillis();
-            long took=((end - start) / 1000);
-            if(took>=60){
-                running=false;
-            }
+            normalWork++;
         }
+
     }
         /*
         long endRt = System.nanoTime();
